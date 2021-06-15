@@ -7,9 +7,9 @@
     <label for="Dos">N Cliente</label>
     <div v-if="picked==2">
       <select v-model="selected">
-        <option value="1">001 - Consumo</option>
-        <option value="2">002 - Credito</option>
-        <option value="3">003 - Servicio</option>
+        <option value="1">001 - Gastos comunes</option>
+        <option value="2">002 - Reservas Aeas sociales</option>
+        <option value="3">003 - Consumos</option>
       </select>
     </div>
     <button v-on:click="consultar" :disabled="isActive">Buscar</button><br>
@@ -84,11 +84,11 @@
     <div v-if="formPago==true" id="pago">
       <form v-on:submit.prevent="procesarPago">
         <label>Nombre</label><br>
-        <input v-model="pagoForm.NOMBREFACTURA" ref="foco" type="text" ><br>
+        <input v-model="pagoForm.NOMBREFACTURA" ref="foco" type="text" required><br>
         <label>Nit</label><br>
-        <input v-model="pagoForm.NITFACTURA" type="text"><br>
+        <input v-model="pagoForm.NITFACTURA" type="text" required><br>
         <label>Monto Total</label><br>
-          <input v-model="pagoForm.MONTOTOTAL" type="text"><br>
+          <input v-model="pagoForm.MONTOTOTAL" type="text" required><br>
 
 
         <input type="submit" value="Procesar Pago">
@@ -101,7 +101,7 @@
 </template>
 <script>
 import axios from 'axios'
-import {mensajeErrUsuario} from "@/util/seetalert_mensajes";
+import {mensajeError, mensajeExito} from "@/util/seetalert_mensajes";
 // import {mensajeError, mensajeExito} from "@/util/seetalert_mensajes";
 export default {
   name: 'ConsultaPago',
@@ -144,15 +144,18 @@ export default {
   },
   methods:{
     consultar(){
-      var eleccion = this.picked;
-      this.isActiveDeuda = false;
-      this.formPago = false;
-      if (eleccion ==1){
-        this.botonPagoar = false;
-        this.getOrdenPago();
-      }else{
-        this.getPorIdCliente();
+      if(!this.inputNconsulta==""){
+        var eleccion = this.picked;
+        this.isActiveDeuda = false;
+        this.formPago = false;
+        if (eleccion ==1){
+          this.botonPagoar = false;
+          this.getOrdenPago();
+        }else{
+          this.getPorIdCliente();
+        }
       }
+
 
     },
     getOrdenPago(){
@@ -199,8 +202,11 @@ export default {
 
       axios.get('http://localhost:8091/consulta-cuotas/'+this.idDeuda)
           .then(resp=>{
+
             var error = resp.statusText;
               if (error == 'errores'){
+
+                mensajeError(this, "Parametro de busqueda no arrojo resultados con cuotas");
               }else{
                 this.isActiveDeuda=true;
                 this.detallesCuotas = resp.data;
@@ -223,7 +229,6 @@ export default {
 
     },
     habilitarPago(){
-      if (this.datosDeudas.codError)
       this.formPago=true;
 
     },
@@ -231,9 +236,9 @@ export default {
       axios.post('http://localhost:8091/pago-servicio',this.pagoForm)
           .then(res => {
             if (res.statusText == "error") {
-              mensajeErrUsuario(this, "Usuario o Contraseña incorrecto");
+              mensajeError(this, "Hubo un error al realizar pago");
             }else{
-              this.$router.push('consulta-pago');
+              mensajeExito(this, "Pago procesado exitosamente");
             }
           });
 

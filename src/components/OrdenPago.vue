@@ -1,17 +1,21 @@
 <template>
   <div id="OrdenPago">
+    <h1>Generar nueva orden de pago</h1>
   <form v-on:submit.prevent="getOrdenPago">
     <label>Nombre</label><br>
-    <input v-model="condominoForm.nombrePagador" type="text" value="Richar Daniel Meza"><br>
+    <input v-model="condominoForm.nombrePagador" type="text" value="Richar Daniel Meza" required><br>
     <label>Documento</label><br>
-    <input v-model="condominoForm.documentoNum" type="text" value="3265844"/><br>
+    <input v-model="condominoForm.documentoNum" type="text" value="3265844" required/><br>
     <label>Numero casa</label><br>
-    <input v-model="condominoForm.numeroCasaDep" type="text" value="12"/><br>
+    <input v-model="condominoForm.numeroCasaDep" type="text" value="12" required/><br>
     <label>Valor a pagar</label><br>
-    <input v-model="condominoForm.valoraPagar" type="text" value="100000"/><br>
+    <input v-model="condominoForm.valoraPagar" type="text" value="100000" required/><br>
     <label>id servicio</label><br>
-    <input v-model="condominoForm.servicios_idservicios" type="text" value="1"/><br>
-    <h1>{{condominoForm.servicios_idservicios}}</h1>
+    <select v-model="condominoForm.servicios_idservicios">
+      <option value="1">001 - Gastos comunes</option>
+      <option value="2">002 -  Reservas Aeas sociales</option>
+      <option value="3">003 - Consumos</option>
+    </select><br>
     <input type="submit" value="Enviar">
   </form>
   </div>
@@ -33,7 +37,7 @@ export default {
         documentoNum : '',
         numeroCasaDep : '',
         valoraPagar : '',
-        servicios_idservicios : ''
+        servicios_idservicios : '1'
       }
 
     }
@@ -70,3 +74,64 @@ export default {
 }
 
 </script>
+<style>
+#OrdenPago{
+  width: 50%;
+  height: 350px;
+  border: 1px solid blue;
+  text-align: center;
+  margin: 20px auto 20px;
+}
+input[type="submit"]{
+  margin-top: 10px;
+  border-radius: 6px;
+  border: 1px solid green;
+  width: 85px;
+  height: 36px;
+  padding: 3px;
+  cursor: pointer;
+}
+
+#inputBusqueda{
+  border: 1px solid;
+  margin-right: 5px;
+  /*padding: 0 46px 0 8px;*/
+  width: 350px;
+  height: 32px;
+  /*display: block;*/
+
+  font-weight: 300;
+  margin-top: 5px;
+  border-radius: 4px;
+
+
+}
+button{
+
+  border-radius: 6px;
+  border: 1px solid green;
+  width: 85px;
+
+  height: 36px;
+  padding: 3px;
+  background-color: #70b231;
+  color: white;
+  cursor: pointer;
+}
+button:disabled{
+  border-radius: 6px;
+  border: 1px solid green;
+  width: 85px;
+
+  height: 36px;
+  padding: 3px;
+  background-color: gray;
+  color: white;
+
+}
+table{
+  margin: 20px auto 20px;
+
+}
+
+</style>
