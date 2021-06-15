@@ -45,7 +45,6 @@ export default {
             if (res.status == 200){
               this.condomino = res.data;
             }
-            console.log(this.condomino);
           });
     },
     getOrdenPago(){

@@ -30,7 +30,6 @@ export default {
     logear() {
       axios.post('http://localhost:8091/login',this.userForm)
           .then(res => {
-            console.log(res);
             if (res.statusText == "error") {
               mensajeErrUsuario(this, "Usuario o Contraseña incorrecto");
             }else{
